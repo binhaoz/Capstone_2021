@@ -2,61 +2,72 @@
 """
 Created on Tue Aug  1 03:59:17 2017
 
-@author: Pale and zwl
+@author:  zhuowenlin
 """
 import numpy as np
-import os
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+# the os is not used
 
-# data = open("atom.lammpstrj","r")
+#data = open("last_5_frames.txt","r") what is the meaning of it??
 x = []
-atomnumber = 785
-frame = 550
+y = []
+#atomnumber = 785  
+atomnumber= 18102 #number of atoms shown in the last five frames
+frame = 1 #  multi-frame is not necessary 
 
 
-def atom_dis(r, skip=9):
-    i = 1
-    for i in range(skip):
-        r.readline()
-        i += 1
+def atom_dis(r, skip=0):
+  
+
     i = 1
     for i in range(atomnumber):
-        i += 1
+        i +=1
         s = r.readline().strip().split()
-        # print(s)
-        Type = int(s[1])
-        xs = float(s[2]) % 1
-        xe = float(s[3]) % 1
-        if Type == 7:
-            x.append([xs, xe])
-            # print(Type)
-            # print(s)
-    return
-
+        #print(s)
+        Type = s[2]
+        x_co = float(s[4])
+        y_co = float(s[5])
+        if Type =='O': 
+            x.append(x_co)
+            y.append(y_co)
+            #print(Type)
+            #print(s)
+    return 
 
 def cycle(frame):
-    r = open("80-atom.lammpstrj", "r")
-    j = 1
-    for j in range(frame):
-        j += 1
-        atom_dis(r, skip=9)
-        x_array = np.array(x)
-        # z_array = x_array
-        # z_array += z_array
-    return x_array
+    r = open("last_5_frames.txt","r")
+    #j = 1
+    #for j in range(frame):
+    #    j +=1
+    atom_dis(r, skip=0) #调用函数atom_dis
+    x_array = np.array(x)
+    y_array = np.array(y)
+        #z_array = x_array
+        #z_array += z_array
+    return x_array, y_array
 
 
-# atomnum(file)
-cycle(frame)
-# hist2,bins2=np.histogram(cycle(frame=69),bins=100)
-# print(hist2)
-# print(bins2)
-# test
-# test22222222
-# test33333333
-# test4
-# test5
-# test6
-# test7
-# test8
-# test9
-# test10
+
+#atomnum(file)
+#cycle(frame)
+#hist2,bins2=np.histogram(cycle(frame=69),bins=100)
+#print(hist2)
+#print(bins2) 
+np.z = cycle(frame)
+H, xedges, yedges=np.histogram2d(np.z[0], np.z[1], bins=80)
+                                 
+                                
+
+
+
+xcenters = (xedges[:-1] + xedges[1:]) / 2
+ycenters = (yedges[:-1] + yedges[1:]) / 2
+#im.set_data(xcenters, ycenters, H)
+#ax.images.append(im)
+
+#######################################################
+cp = plt.contourf(H/5,cmap='rainbow')
+plt.colorbar(cp)
+plt.savefig("fig-B-1.28.eps", format='eps', dpi=2000)
+#plt.imshow(H)
