@@ -12,8 +12,19 @@ import matplotlib.pyplot as plt
 #data = open("last_5_frames.txt","r") what is the meaning of it??
 x = []
 y = []
-#atomnumber = 785  
+#atomnumber = 785
+
+# 方法一
 atomnumber= 18102 #number of atoms shown in the last five frames
+
+# 方法二
+count = 0
+f = open("last_5_frames.txt", "r")
+for line in f.readlines():
+    count += 1
+atomnumber = count
+# 注意txt中不要有空行
+
 frame = 1 #  multi-frame is not necessary 
 
 
